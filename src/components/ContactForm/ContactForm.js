@@ -1,69 +1,66 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import s from './ContactForm.module.css'
 import PropTypes from 'prop-types';
 
-class ContactForm extends Component {
+function ContactForm({ onSubmit }) {
+    const [ name, setName ] = useState('');
+    const [ number, setNumber ] = useState('');
     
-    state = {
-    name: '',
-    number: '',
+    const handleInputChange = e => {
+        switch (e.currentTarget.name) {
+            case "name": return setName(e.currentTarget.value);
+            case "number": return setNumber(e.currentTarget.value);
+            default: return "";
+        }
     }
 
-    HandleInputChange = event => {
-        const { name, value } = event.currentTarget;
-        this.setState({[name]: value})
-    }
-
-    HandleSubmit = event => {
+    const handleSubmit = event => {
         event.preventDefault();
-        this.props.onSubmit(this.state);
-        this.formReset();
+        onSubmit(name, number);
+        formReset();
     }
 
-    formReset = () => {
-        this.setState({name: '', number: ''})
+    const formReset = () => {
+        setName("");
+        setNumber("");
+        return
     }
     
-    render() {
-
-        return (
-            
-            <form onSubmit={this.HandleSubmit} className={s.form}>
+    return (
+        <form onSubmit={handleSubmit} className={s.form}>
                     
-                <label className={s.label}>
-                    Name
-                    <input
-                        type="text"
-                        name="name"
-                        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                        required
-                        value={this.state.name}
-                        onChange={this.HandleInputChange}
-                        className={s.input}
-                    />
-                </label>
+            <label className={s.label}>
+                Name
+                <input
+                    type="text"
+                    name="name"
+                    pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+                    title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+                    required
+                    value={name}
+                    onChange={handleInputChange}
+                    className={s.input}
+                />
+            </label>
 
-                <label className={s.label}>
-                    Number
-                    <input
-                        type="tel"
-                        name="number"
-                        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                        required
-                        value={this.state.number}
-                        onChange={this.HandleInputChange}
-                        className={s.input}
-                    />
-                </label>
+            <label className={s.label}>
+                Number
+                <input
+                    type="tel"
+                    name="number"
+                    pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                    title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+                    required
+                    value={number}
+                    onChange={handleInputChange}
+                    className={s.input}
+                />
+            </label>
 
-                <button className={s.btn}>Add contact</button>
+            <button className={s.btn}>Add contact</button>
                     
-            </form>
-        
-        );
-    };
+        </form>   
+    );   
 };
 
 export default ContactForm;
